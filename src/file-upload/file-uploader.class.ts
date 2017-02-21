@@ -98,15 +98,16 @@ export class FileUploader {
       }
 
       let temp = new FileLikeObject(some);
-      if (this._isValidFile(temp, arrayOfFilters, options)) {
+
+      this._isValidFile(temp, arrayOfFilters, options).then(() => {
         let fileItem = new FileItem(this, some, options);
         addedFileItems.push(fileItem);
         this.queue.push(fileItem);
         this._onAfterAddingFile(fileItem);
-      } else {
+      }).catch(() => {
         let filter = arrayOfFilters[this._failFilterIndex];
         this._onWhenAddingFileFailed(temp, filter, options);
-      }
+      });
     });
     if (this.queue.length !== count) {
       this._onAfterAddingAll(addedFileItems);
@@ -400,12 +401,21 @@ export class FileUploader {
     return this.options.queueLimit === undefined || this.queue.length < this.options.queueLimit;
   }
 
-  protected _isValidFile(file:FileLikeObject, filters:FilterFunction[], options:FileUploaderOptions):boolean {
-    this._failFilterIndex = -1;
-    return !filters.length ? true : filters.every((filter:FilterFunction) => {
-      this._failFilterIndex++;
-      return filter.fn.call(this, file, options);
-    });
+  protected _isValidFile(file:FileLikeObject, filters:FilterFunction[], options:FileUploaderOptions): Promise<boolean> {
+    return Promise.all(
+      filters.map((filter) => {
+        const isValid = filter.fn.call(this, file, options);
+
+        return isValid
+          ? Promise.resolve(isValid)
+          : Promise.reject(isValid);
+      })
+    ).then((values) => values.every((value) => value));
+    // this._failFilterIndex = -1;
+    // return !filters.length ? true : filters.every((filter:FilterFunction) => {
+    //   this._failFilterIndex++;
+    //   return filter.fn.call(this, file, options);
+    // });
   }
 
   protected _isSuccessCode(status:number):boolean {
