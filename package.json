@@ -22,7 +22,7 @@
     "test-coverage": "ng test -sr -cc",
     "version": "npm run flow.changelog && git add -A"
   },
-  "main": "dist/bundles/ng2-file-upload.umd.js",
+  "main": "bundles/ng2-file-upload.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
   "keywords": [
