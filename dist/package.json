@@ -1,5 +1,5 @@
 {
-  "main": "dist/bundles/ng2-file-upload.umd.js",
+  "main": "bundles/ng2-file-upload.umd.js",
   "version": "1.2.0",
   "description": "Angular file upload directives",
   "module": "index.js",
