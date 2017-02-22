@@ -1,0 +1,32 @@
+{
+  "main": "bundles/ng2-file-upload.umd.js",
+  "version": "1.2.0",
+  "description": "Angular file upload directives",
+  "module": "index.js",
+  "typings": "index.d.ts",
+  "keywords": [
+    "angular2",
+    "bootstrap",
+    "angularjs",
+    "twitter-bootstrap",
+    "file-upload",
+    "angular-file-upload"
+  ],
+  "author": {
+    "name": "Vyacheslav Chub",
+    "email": "vyacheslav.chub@valor-software.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/valor-software/ng2-file-upload.git"
+  },
+  "name": "ng2-file-upload",
+  "peerDependencies": {
+    "@angular/common": "^2.3.0",
+    "@angular/core": "^2.3.0"
+  },
+  "_id": "ng2-file-upload@1.2.0",
+  "devDependencies": {},
+  "dependencies": {}
+}
