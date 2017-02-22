@@ -19,7 +19,6 @@
 npm-debug.log
 
 # ignore build and dist for now
-/dist
 /temp
 /demo/dist
 /demo/temp
