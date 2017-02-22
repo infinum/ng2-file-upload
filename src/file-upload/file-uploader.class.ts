@@ -13,7 +13,7 @@ export interface Headers {
 
 export type ParsedResponseHeaders = {[headerFieldName:string]:string};
 
-export type FilterFunction = {name:string, fn:(item?:FileLikeObject, options?:FileUploaderOptions)=>boolean};
+export type FilterFunction = {name:string, fn:(item?:FileLikeObject, options?:FileUploaderOptions)=>boolean|Promise<boolean>};
 
 export interface FileUploaderOptions {
   allowedMimeType?:Array<string>;
@@ -402,20 +402,24 @@ export class FileUploader {
   }
 
   protected _isValidFile(file:FileLikeObject, filters:FilterFunction[], options:FileUploaderOptions): Promise<boolean> {
+    this._failFilterIndex = -1;
+
     return Promise.all(
       filters.map((filter) => {
         const isValid = filter.fn.call(this, file, options);
 
-        return isValid
+        return Promise.resolve(isValid);
+      })
+    ).then((values) => {
+      const isValid = values.every((value) => {
+        this._failFilterIndex++;
+        return value;
+      });
+
+      return isValid
           ? Promise.resolve(isValid)
           : Promise.reject(isValid);
-      })
-    ).then((values) => values.every((value) => value));
-    // this._failFilterIndex = -1;
-    // return !filters.length ? true : filters.every((filter:FilterFunction) => {
-    //   this._failFilterIndex++;
-    //   return filter.fn.call(this, file, options);
-    // });
+    });
   }
 
   protected _isSuccessCode(status:number):boolean {
